@@ -1,7 +1,8 @@
 package com.amcom.order.controller;
 
 import com.amcom.order.domain.Order;
-import com.amcom.order.repository.OrderRepository;
+import com.amcom.order.dto.OrderDTO;
+import com.amcom.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable String id) {
-        return orderRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(404).body(null));
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id) {
+        try {
+            Order order = orderService.getOrderById(id);
+            return ResponseEntity.ok(order.toDTO());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(null);
+        }
     }
 }

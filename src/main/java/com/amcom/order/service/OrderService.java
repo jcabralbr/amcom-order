@@ -22,4 +22,9 @@ public class OrderService {
             orderRepository.save(order);
         }
     }
+
+    public Order getOrderById(String id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+    }
 }
