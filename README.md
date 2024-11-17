@@ -1,17 +1,38 @@
 # amcom-order
-Projeto para consumir os pedidos que estão no projeto amcom, em uma fila kafka e persistí-los no banco
+Projeto para consumir os pedidos que estão no projeto amcom, em uma fila kafka e persistí-los no banco orders, no MySql.
 
-comandos kafka
-==============
+Para executar o projeto, siga os seguintes passos:
 
-entrar no container: kafka-console-consumer --topic purchase_order --bootstrap-server localhost:9092 --from-beginning
+1 - Precisa executar o projeto OrderProducer
+2 - start da classe OrderConsumerApplication
 
-criar o topico:
-kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3 --topic purchase_order
-kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3 --topic dlq_duplicate_orders
+Endpoint:
+========
 
-listar o topico:
-kafka-console-consumer --topic purchase_order --bootstrap-server localhost:9092 --from-beginning
-kafka-console-consumer --topic dlq_duplicate_orders --bootstrap-server localhost:9092 --from-beginning
+Existe um endpoint para consultar os pedidos armazenados na base de dados.
+A URL é http://localhost:8099/api/orders/{orderId} onde orderId é o número do pedido.
+Se o pedido existe, é retornado o status Ok (200), com as informações do pedido.
+Se o pedido não existe, é retornado o status Not Found (404) e uma mensagem informando que o pedido não existe.
 
+Exemplos:
 
+1) Quando o pedido não existe (404):
+curl http://localhost:8099/api/orders/1
+  {
+    "message":"Pedido não encontrado para o orderId: 1"
+  }
+
+2) Quando o pedido for encontrado (200):
+curl http://localhost:8099/api/orders/2589
+  {
+    "orderId":"2589",
+    "items":[
+              {
+                "sku":"SKU-816",
+                "quantity":4,
+                "unitPrice":12.66
+              }
+            ],
+    "totalPrice":50.64,
+    "orderStatus":"CREATED"
+  }
