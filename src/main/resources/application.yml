@@ -3,27 +3,19 @@ endpoints:
     enabled: true
 server:
   port: 8099
-
 spring:
   kafka:
     bootstrap-servers: localhost:9092
-    consumer:
-      group-id: order-group
-      auto-offset-reset: earliest
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    template:
-      default-topic: dlq_topic
-
+    dlq:
+      topic: dlq_duplicate_orders
   datasource:
-    url: jdbc:mysql://localhost:3306/order_db
-    username: root
-    password: password
+    url: jdbc:mysql://localhost:3306/orders
+    username: julio
+    password: julio123
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
+      maximum-pool-size: 3
+      minimum-idle: 1
       idle-timeout: 30000
       max-lifetime: 1800000
       connection-timeout: 30000

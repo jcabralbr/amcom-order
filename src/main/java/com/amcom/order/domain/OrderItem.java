@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Embeddable
 public class OrderItem {
-
-    private String skuId;
+    private String sku;
     private Integer quantity;
     private Double unitPrice;
 }

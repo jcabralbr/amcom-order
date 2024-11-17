@@ -1,7 +1,8 @@
 package com.amcom.order.service;
 
-import com.amcom.order.domain.Order;
+import com.amcom.order.dto.OrderDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +10,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaProducerService {
 
-    private final KafkaTemplate<String, Order> kafkaTemplate;
+    @Value(value = "${spring.kafka.dlq.topic:dlq_duplicate_orders}")
+    private String dlqTopic;
 
-    public void sendToDlq(Order order) {
-        kafkaTemplate.send("dlq_duplicate_orders", order);
+    private final KafkaTemplate<String, OrderDTO> kafkaTemplate;
+
+    public void sendToDlq(OrderDTO orderDTO) {
+        kafkaTemplate.send(dlqTopic, orderDTO.orderId(), orderDTO);
     }
 }

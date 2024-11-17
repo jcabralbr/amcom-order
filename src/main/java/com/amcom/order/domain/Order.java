@@ -15,9 +15,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Builder
 public class Order {
-
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String orderId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
@@ -25,6 +27,10 @@ public class Order {
 
     @Column(nullable = false)
     private Double totalPrice;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     public void calculateTotalPrice() {
         totalPrice = items.stream()
@@ -35,13 +41,13 @@ public class Order {
     public OrderDTO toDTO() {
         var itemDTOs = this.items.stream()
                 .map(item -> OrderItemDTO.builder()
-                        .skuId(item.getSkuId())
+                        .sku(item.getSku())
                         .quantity(item.getQuantity())
                         .unitPrice(item.getUnitPrice())
                         .build())
                 .collect(Collectors.toList());
 
-        return new OrderDTO(this.id, this.totalPrice, itemDTOs);
+        return new OrderDTO(this.orderId, itemDTOs);
     }
 }
 

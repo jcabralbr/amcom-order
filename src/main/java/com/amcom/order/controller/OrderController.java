@@ -18,9 +18,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id) {
+    public ResponseEntity<OrderDTO> getOrderByOrderId(@PathVariable String orderId) {
         try {
-            Order order = orderService.getOrderById(id);
+            Order order = orderService.getOrderByOrderId(orderId);
             return ResponseEntity.ok(order.toDTO());
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(null);

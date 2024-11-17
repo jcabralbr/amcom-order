@@ -1,7 +1,9 @@
 package com.amcom.order.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
 
 @Builder
-public record OrderItemDTO(String skuId, Integer quantity, Double unitPrice) {
+@JsonSerialize
+public record OrderItemDTO(String sku, Integer quantity, Double unitPrice) {
 }
