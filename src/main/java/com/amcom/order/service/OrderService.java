@@ -28,8 +28,7 @@ public class OrderService {
         }
     }
 
-    public Order getOrderByOrderId(String orderId) {
-        return orderRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+    public Optional<Order> getOrderByOrderId(String orderId) {
+        return orderRepository.findByOrderId(orderId);
     }
 }
