@@ -3,7 +3,7 @@ Projeto para consumir os pedidos que estão no projeto amcom, em uma fila kafka 
 
 Para executar o projeto, siga os seguintes passos:
 
-1 - Precisa executar o projeto OrderProducer
+1 - Precisa executar o projeto OrderProducer (https://github.com/jcabralbr/amcom/blob/main/README.md)
 
 2 - start da classe OrderConsumerApplication
 
